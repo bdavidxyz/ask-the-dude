@@ -8,57 +8,55 @@
   Ask a question to the dude (ended by "?").
 </p>
 <p>  
-  <input id="the_input" type="text" name="">
-  <button id="the_button">Ask the dude</button>
+  <input id="ask-input" type="text" name="">
+  <button id="ask-button">Ask the dude</button>
 </p>
-<p>
-  <div id="the_result_wait" style="display: none;">
-    wait...
-  </div>
-  <div id="the_result_ok" class="actual-result" style="background-color: green;display: none;">
-    yes
-  </div>
-  <div id="the_result_nok" class="actual-result" style="background-color: red;display: none;">
-    no
-  </div>
-  <div id="the_result_error" class="actual-result" style="background-color: orange;display: none;">
-    error
-  </div>
-</p>
+<div id="result-section">
+
+</div>
   <script src="jquery-2.2.4.js"></script>
   <script type="text/javascript">
     
+    function getRandomQuoteAboutError() {
+      var quotes = ["An error does not become truth by reason of multiplied propagation, nor does the truth become error because nobody will see it", "Science, my lad, has been built upon many errors; but they are errors which it was good to fall into, for they led to the truth.", "A mistake is a mistake", "To err is human, to persist in error is diabolical", "When I was a kid, they had a saying, \"to err is human but to really fuck it up takes a computer.\""]
+      // see https://stackoverflow.com/questions/5915096/get-random-item-from-javascript-array
+      var quote = quotes[Math.floor(Math.random()*quotes.length)];
+      return quote;
+    }
+
     function isOdd(num) { return num % 2;}
 
     function hideAll() {
-        $('#the_result_ok').hide();
-        $('#the_result_nok').hide();
-        $('#the_result_error').hide();
-        $('#the_result_wait').hide();
+      $('#result-section').empty();
     }
 
     $( document ).ready(function() {
-      hideAll();
 
-      $('#the_button').click(function() {
+      $('#ask-button').click(function() {
         hideAll();
-        $('#the_result_wait').show();
+        $( '<div id="result-wait">Wait...</div>' ).appendTo( '#result-section' );
 
         setTimeout(function(){ 
           hideAll();
-          var user_val = $('#the_input').val();
+          var user_val = $('#ask-input').val();
           var number_of_whitespaces = user_val.split(' ').length - 1;
           var last_char = user_val.slice(-1);
           if (last_char !== '?') {
-            $('#the_result_error').show();
+            $('<div id="result-error" class="actual-result" style="background-color: orange;"><span>error</span></div><button id="button-quote" onclick="$(\'<span>\' + getRandomQuoteAboutError() + \'</span>\').appendTo(\'#quote-text\');$(\'#button-quote\').hide();">Quote about error</button><p id="quote-text"></p>').appendTo( '#result-section');
           } else if (isOdd(number_of_whitespaces)) {
-            $('#the_result_nok').show();
+            $('<div id="result-nok" class="actual-result" style="background-color: red;"><span>no</span></div>' ).appendTo( '#result-section');
           } else {
-            $('#the_result_ok').show();
+            $('<div id="result-ok" class="actual-result" style="background-color: green;"><span>yes</span></div>' ).appendTo( '#result-section');
           }
          }, 2000);
 
       });
+
+
+      $('#button-quote').click(function() {
+        console.log('clicked!');
+      });
+      
     });
 
   </script>
