@@ -1,1 +1,1 @@
-# simple-template
+# Just ask the dude anything !
